@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "@/test-utils";
 import Header from ".";
 
 describe("Header", () => {
@@ -48,5 +48,29 @@ describe("Header", () => {
 		expect(
 			screen.getByRole("link", { name: /about/i })
 		).toBeInTheDocument();
+	});
+
+	it("Should render a button to login if user isn't logged", () => {
+		render(<Header />);
+
+		expect(
+			screen.getByRole("button", { name: /login/i })
+		).toBeInTheDocument();
+	});
+
+	it("Should render an avatar dropdown if user is logged", async () => {
+		render(<Header />);
+		expect(await screen.findByText(/john doe/i)).toBeInTheDocument();
+		expect(
+			await screen.findByRole("menu", { name: /user/i })
+		).toBeInTheDocument();
+	});
+
+	it("Should hide avatar dropdown if user isn't logged", () => {
+		render(<Header />);
+
+		expect(
+			screen.queryByRole("menu", { name: /user/i })
+		).not.toBeInTheDocument();
 	});
 });

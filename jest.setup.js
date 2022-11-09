@@ -4,6 +4,8 @@
 // Used for __tests__/testing-library.js
 // Learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom/extend-expect";
+import { setupServer } from "msw/node";
+import { handlers } from "@/mocks/handlers";
 
 jest.mock("next/dynamic", () => ({
 	__esModule: true,
@@ -17,3 +19,8 @@ jest.mock("next/dynamic", () => ({
 		return RequiredComponent;
 	},
 }));
+
+const server = setupServer(...handlers);
+beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());

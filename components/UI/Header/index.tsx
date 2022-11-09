@@ -1,14 +1,17 @@
 import dynamic from "next/dynamic";
-import Image from "next/image";
 import Link from "next/link";
-import logo from "../../../public/vercel.svg";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
+import { useMe } from "@/queries/auth/hooks";
+import { Logo } from "@/components/UI/Logo";
 
 const Header = () => {
-	const isMobile = global.innerWidth < 768;
+	const { data } = useMe();
+	const { isMobile } = useBreakpoint();
 
 	return (
 		<div>
-			<Image src={logo} alt="logo" />
+			<div>{data?.name}</div>
+			<Logo />
 			{!isMobile && (
 				<nav>
 					<ul>
@@ -22,6 +25,8 @@ const Header = () => {
 				</nav>
 			)}
 			{isMobile && <button aria-label="menu">|||</button>}
+			<button aria-label="login">Login</button>
+			{data && <div role="menu" aria-label="user"></div>}
 		</div>
 	);
 };
