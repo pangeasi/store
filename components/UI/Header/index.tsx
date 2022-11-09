@@ -3,8 +3,10 @@ import Link from "next/link";
 import { useBreakpoint } from "@/hooks/useBreakpoint";
 import { useMe } from "@/queries/auth/hooks";
 import { Logo } from "@/components/UI/Logo";
+import { useRouter } from "next/router";
 
 const Header = () => {
+	const { push } = useRouter();
 	const { data } = useMe();
 	const { isMobile } = useBreakpoint();
 
@@ -25,7 +27,9 @@ const Header = () => {
 				</nav>
 			)}
 			{isMobile && <button aria-label="menu">|||</button>}
-			<button aria-label="login">Login</button>
+			<button aria-label="login" onClick={() => push("/login")}>
+				Login
+			</button>
 			{data && <div role="menu" aria-label="user"></div>}
 		</div>
 	);

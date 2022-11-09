@@ -4,8 +4,7 @@
 // Used for __tests__/testing-library.js
 // Learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom/extend-expect";
-import { setupServer } from "msw/node";
-import { handlers } from "@/mocks/handlers";
+import { server } from "@/test-utils";
 
 jest.mock("next/dynamic", () => ({
 	__esModule: true,
@@ -19,8 +18,24 @@ jest.mock("next/dynamic", () => ({
 		return RequiredComponent;
 	},
 }));
+jest.mock("next/router", () => ({
+	useRouter() {
+		return {
+			route: "/",
+			pathname: "",
+			query: "",
+			asPath: "",
+			push: jest.fn(),
+			events: {
+				on: jest.fn(),
+				off: jest.fn(),
+			},
+			beforePopState: jest.fn(() => null),
+			prefetch: jest.fn(() => null),
+		};
+	},
+}));
 
-const server = setupServer(...handlers);
 beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
