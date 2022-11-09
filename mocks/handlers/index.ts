@@ -9,4 +9,12 @@ export const handlers = [
 			})
 		);
 	}),
+	rest.post(`*/auth/login`, (req, res, ctx) => {
+		return res(
+			ctx.status(201),
+			ctx.json({
+				token: "123456",
+			})
+		);
+	}),
 ];

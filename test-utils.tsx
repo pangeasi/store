@@ -1,6 +1,7 @@
 import { render } from "@testing-library/react";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-
+import { handlers } from "./mocks/handlers";
+import { setupServer } from "msw/node";
 const createTestQueryClient = () =>
 	new QueryClient({
 		defaultOptions: {
@@ -30,6 +31,7 @@ const customRender = (ui: React.ReactElement) => {
 			),
 	};
 };
+export const server = setupServer(...handlers);
 
 export * from "@testing-library/react";
 export { customRender as render };
