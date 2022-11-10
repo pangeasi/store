@@ -20,6 +20,19 @@ describe("LoginForm", () => {
 		expect(screen.getByRole("button", { name: "submit" })).toBeEnabled();
 	});
 
+	it("should be display a error message if email is invalid", async () => {
+		render(<FormLogin />);
+
+		const inputEmail = screen.getByLabelText("Email");
+		const inputPassword = screen.getByLabelText("Password");
+		await userEvent.type(inputEmail, "invalid");
+		await userEvent.type(inputPassword, faker.internet.password());
+
+		expect(
+			screen.getByText("email must be a valid email")
+		).toBeInTheDocument();
+	});
+
 	it("should be not display success message if form is not submitted", () => {
 		render(<FormLogin />);
 
@@ -32,9 +45,6 @@ describe("LoginForm", () => {
 		const inputPassword = screen.getByLabelText("Password");
 		await userEvent.type(inputEmail, faker.internet.email());
 		await userEvent.type(inputPassword, faker.internet.password());
-
-		expect(screen.queryByText(/login success/i)).not.toBeInTheDocument();
-
 		await userEvent.click(screen.getByRole("button", { name: "submit" }));
 
 		expect(await screen.findByText(/login success/i)).toBeInTheDocument();
@@ -50,6 +60,7 @@ describe("LoginForm", () => {
 			})
 		);
 		render(<FormLogin />);
+
 		const inputEmail = screen.getByLabelText("Email");
 		const inputPassword = screen.getByLabelText("Password");
 		await userEvent.type(inputEmail, faker.internet.email());

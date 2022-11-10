@@ -3,35 +3,50 @@ import Link from "next/link";
 import { useBreakpoint } from "@/hooks/useBreakpoint";
 import { useMe } from "@/queries/auth/hooks";
 import { Logo } from "@/components/UI/Logo";
-import { useRouter } from "next/router";
+import { Avatar } from "@/components/Avatar";
+import { Spinner } from "@/components/Base/Spinner";
+import HamburgerMenu from "@/components/Icons/HamburgerMenu";
 
 const Header = () => {
-	const { push } = useRouter();
-	const { data } = useMe();
+	const { data, isFetching, isLoading } = useMe();
 	const { isMobile } = useBreakpoint();
 
 	return (
-		<div>
-			<div>{data?.name}</div>
-			<Logo />
+		<header className="flex justify-between items-center mx-4">
+			<Link href="/">
+				<Logo />
+			</Link>
 			{!isMobile && (
 				<nav>
-					<ul>
-						<li>
+					<ul className="flex gap-6 text-lg">
+						<li className="transition ease-in hover:-translate-y-1 delay-150 hover:underline hover:decoration-1 hover:decoration-wavy duration-300">
 							<Link href="/categories">Categories</Link>
 						</li>
-						<li>
+						<li className="transition ease-in hover:-translate-y-1 delay-150 hover:underline hover:decoration-1 hover:decoration-wavy duration-300">
 							<Link href="/about">About</Link>
 						</li>
 					</ul>
 				</nav>
 			)}
-			{isMobile && <button aria-label="menu">|||</button>}
-			<button aria-label="login" onClick={() => push("/login")}>
-				Login
-			</button>
-			{data && <div role="menu" aria-label="user"></div>}
-		</div>
+			{isMobile && (
+				<button aria-label="menu">
+					<HamburgerMenu />
+				</button>
+			)}
+			<div className="flex gap-4">
+				{!isFetching && !data && (
+					<Link
+						className="border-blue-500 border-2 rounded-full px-2 border-dotted"
+						href="/login"
+					>
+						Login
+					</Link>
+				)}
+
+				{data && !isLoading && <Avatar />}
+				{isFetching && isLoading && <Spinner />}
+			</div>
+		</header>
 	);
 };
 

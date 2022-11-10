@@ -6,6 +6,7 @@ export const handlers = [
 				id: 1,
 				name: "John Doe",
 				email: "john.doe@gmail.com",
+				avatar: "https://i.pravatar.cc/150?img=1",
 			})
 		);
 	}),

@@ -1,5 +1,12 @@
 import { FormLogin } from "@/components/Forms/Login";
+import { Layout } from "@/components/UI/Layout";
 
-export default function Login() {
-	return <FormLogin />;
-}
+const Login = () => {
+	return (
+		<Layout>
+			<FormLogin />
+		</Layout>
+	);
+};
+
+export default Login;
