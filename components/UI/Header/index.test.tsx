@@ -1,4 +1,4 @@
-import { render, screen } from "@/test-utils";
+import { mockSessionStorage, render, screen, cleanup } from "@/test-utils";
 import Header from ".";
 
 describe("Header", () => {
@@ -50,20 +50,23 @@ describe("Header", () => {
 		).toBeInTheDocument();
 	});
 
-	it("Should render a button to login if user isn't logged", () => {
+	it("Should render a button to login if user isn't logged", async () => {
 		render(<Header />);
 
 		expect(
-			screen.getByRole("button", { name: /login/i })
+			await screen.findByRole("link", { name: /login/i })
 		).toBeInTheDocument();
 	});
 
 	it("Should render an avatar dropdown if user is logged", async () => {
+		const { setSessionStorage } = mockSessionStorage();
+		await setSessionStorage("token", "12345");
+
 		render(<Header />);
-		expect(await screen.findByText(/john doe/i)).toBeInTheDocument();
 		expect(
-			await screen.findByRole("menu", { name: /user/i })
+			await screen.findByRole("button", { name: /avatar/i })
 		).toBeInTheDocument();
+		cleanup();
 	});
 
 	it("Should hide avatar dropdown if user isn't logged", () => {
