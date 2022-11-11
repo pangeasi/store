@@ -7,7 +7,7 @@ import { rest } from "msw";
 describe("LoginForm", () => {
 	it("should be render a submit button disabled if fields is not filled", () => {
 		render(<FormLogin />);
-		expect(screen.getByRole("button", { name: "submit" })).toBeDisabled();
+		expect(screen.getByRole("button", { name: /log in/i })).toBeDisabled();
 	});
 	it("should be render a submit button enabled if fields is filled", async () => {
 		render(<FormLogin />);
@@ -17,7 +17,7 @@ describe("LoginForm", () => {
 		await userEvent.type(inputEmail, faker.internet.email());
 		await userEvent.type(inputPassword, faker.internet.password());
 
-		expect(screen.getByRole("button", { name: "submit" })).toBeEnabled();
+		expect(screen.getByRole("button", { name: /log in/i })).toBeEnabled();
 	});
 
 	it("should be display a error message if email is invalid", async () => {
@@ -45,7 +45,7 @@ describe("LoginForm", () => {
 		const inputPassword = screen.getByLabelText("Password");
 		await userEvent.type(inputEmail, faker.internet.email());
 		await userEvent.type(inputPassword, faker.internet.password());
-		await userEvent.click(screen.getByRole("button", { name: "submit" }));
+		await userEvent.click(screen.getByRole("button", { name: /log in/i }));
 
 		expect(await screen.findByText(/login success/i)).toBeInTheDocument();
 	});
@@ -65,7 +65,7 @@ describe("LoginForm", () => {
 		const inputPassword = screen.getByLabelText("Password");
 		await userEvent.type(inputEmail, faker.internet.email());
 		await userEvent.type(inputPassword, faker.internet.password());
-		await userEvent.click(screen.getByRole("button", { name: "submit" }));
+		await userEvent.click(screen.getByRole("button", { name: /log in/i }));
 
 		expect(await screen.findByText(/unauthorized/i)).toBeInTheDocument();
 	});

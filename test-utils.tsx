@@ -1,24 +1,23 @@
-import { render } from "@testing-library/react";
+import { render, renderHook } from "@testing-library/react";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { handlers } from "./mocks/handlers";
 import { setupServer } from "msw/node";
 import { ToastContainer } from "react-toastify";
-const createTestQueryClient = () =>
-	new QueryClient({
-		defaultOptions: {
-			queries: {
-				retry: false,
-			},
+export const createTestQueryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			retry: false,
 		},
-		logger: {
-			log: console.log,
-			warn: console.warn,
-			error: () => {},
-		},
-	});
+	},
+	logger: {
+		log: console.log,
+		warn: console.warn,
+		error: () => {},
+	},
+});
 
 const customRender = (ui: React.ReactElement) => {
-	const testQueryClient = createTestQueryClient();
+	const testQueryClient = createTestQueryClient;
 	return render(
 		<QueryClientProvider client={testQueryClient}>
 			{ui}
@@ -26,10 +25,22 @@ const customRender = (ui: React.ReactElement) => {
 		</QueryClientProvider>
 	);
 };
+const wrapper: React.FC<{ children: React.ReactElement }> = ({ children }) => (
+	<QueryClientProvider client={createTestQueryClient}>
+		{children}
+	</QueryClientProvider>
+);
+
+const customRenderHook = (callback: Function) => {
+	return renderHook(() => callback(), {
+		wrapper,
+	});
+};
+
 export const server = setupServer(...handlers);
 
 export * from "@testing-library/react";
-export { customRender as render };
+export { customRender as render, customRenderHook as renderHook };
 
 export const mockSessionStorage = () => {
 	const localStorageMock = (function () {
