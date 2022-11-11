@@ -1,9 +1,10 @@
 import { forwardRef } from "react";
+import { FieldError as FError, FieldErrorsImpl, Merge } from "react-hook-form";
 import { FieldError } from "../FieldError";
 
 type InputProps = {
 	label?: string;
-	error?: string;
+	error?: string | FError | Merge<FError, FieldErrorsImpl<any>> | undefined;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(

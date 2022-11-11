@@ -17,7 +17,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Header />
-			<main className="container m-auto max-w-lg">{children}</main>
+			<main className="container m-auto max-w-lg px-4">{children}</main>
 		</>
 	);
 };
